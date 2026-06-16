@@ -54,8 +54,8 @@ class RideDetailScreen extends StatelessWidget {
                 children: [
                   TileLayer(
                     urlTemplate: AppConstants.mapUrlTemplate,
-                    tileProvider: FMTC.instance(AppConstants.mapStoreKey)
-                        .getTileProvider(),
+                  tileProvider: FMTCStore(AppConstants.mapStoreKey)
+                  .getTileProvider(),
                     userAgentPackageName: 'com.velox.velox',
                   ),
                   if (ride.trackPoints.length >= 2)
