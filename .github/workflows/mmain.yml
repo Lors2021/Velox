@@ -22,10 +22,14 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.29.0"
-          channel: "stable"
+          channel: stable
+          cache: true
 
       - name: Flutter doctor
         run: flutter doctor -v
+
+      - name: Clean project
+        run: flutter clean
 
       - name: Get dependencies
         run: flutter pub get
@@ -36,5 +40,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: apk
+          name: velox-release-apk
           path: velox_fixed/build/app/outputs/flutter-apk/app-release.apk
