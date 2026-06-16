@@ -11,6 +11,7 @@ import 'providers/chat_provider.dart';
 import 'screens/splash_screen.dart';
 import 'utils/app_theme.dart';
 import 'services/notification_service.dart';
+import 'constants/app_constants.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -21,14 +22,17 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  // FMTC v9 initialisation
-await FMTCObjectBoxBackend().initialise();
+  FirebaseMessaging.onBackgroundMessage(
+    _firebaseMessagingBackgroundHandler,
+  );
 
-await FMTCStore(AppConstants.mapStoreKey)
-    .manage
-    .createAsync();
+  await FMTCObjectBoxBackend().initialise();
+
+  await FMTCStore(AppConstants.mapStoreKey)
+      .manage
+      .createAsync();
+
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -48,9 +52,15 @@ class VeloxApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => RideProvider()),
-        ChangeNotifierProvider(create: (_) => ChatProvider()),
+        ChangeNotifierProvider(
+          create: (_) => AuthProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => RideProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ChatProvider(),
+        ),
       ],
       child: MaterialApp(
         title: 'Velox',
