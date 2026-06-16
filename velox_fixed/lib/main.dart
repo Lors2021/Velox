@@ -24,9 +24,11 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   // FMTC v9 initialisation
-  await FlutterMapTileCaching.initialise();
-  await FMTC.instance('mapStore').manage.createAsync();
+await FMTCObjectBoxBackend().initialise();
 
+await FMTCStore(AppConstants.mapStoreKey)
+    .manage
+    .createAsync();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
