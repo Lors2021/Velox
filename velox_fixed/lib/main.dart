@@ -10,11 +10,12 @@ import 'providers/ride_provider.dart';
 import 'providers/chat_provider.dart';
 import 'screens/splash_screen.dart';
 import 'utils/app_theme.dart';
+import 'utils/constants.dart';
 import 'services/notification_service.dart';
-import 'constants/app_constants.dart';
 
 @pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+Future<void> _firebaseMessagingBackgroundHandler(
+    RemoteMessage message) async {
   await Firebase.initializeApp();
 }
 
@@ -31,7 +32,7 @@ void main() async {
 
   await FMTCStore(AppConstants.mapStoreKey)
       .manage
-      .createAsync();
+      .ready;
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
