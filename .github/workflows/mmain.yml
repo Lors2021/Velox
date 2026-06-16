@@ -11,26 +11,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Show files
+        run: |
+          ls -la
+          find . -name pubspec.yaml
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.29.0"
-          channel: stable
+          flutter-version: stable
 
-      - name: Flutter doctor
-        run: flutter doctor -v
-
-      - name: Get dependencies
-        run: flutter pub get
+      - name: Install dependencies
+        run: |
+          cd $(dirname $(find . -name pubspec.yaml | head -1))
+          flutter pub get
 
       - name: Build APK
-        run: flutter build apk --release
+        run: |
+          cd $(dirname $(find . -name pubspec.yaml | head -1))
+          flutter build apk --release
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+          name: apk
+          path: "**/app-release.apk"
