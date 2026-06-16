@@ -83,16 +83,12 @@ class _MapScreenState extends State<MapScreen> {
             ),
             children: [
               TileLayer(
-                urlTemplate: AppConstants.mapUrlTemplate,
-                tileProvider: FMTC.instance(AppConstants.mapStoreKey)
-                    .getTileProvider(
-                  settings: FMTCTileProviderSettings(
-                    behavior: CacheBehavior.cacheFirst,
-                  ),
-                ),
-                userAgentPackageName: 'com.velox.velox',
-                maxNativeZoom: 19,
-              ),
+  urlTemplate: AppConstants.mapUrlTemplate,
+  tileProvider: FMTCStore(AppConstants.mapStoreKey)
+      .getTileProvider(),
+  userAgentPackageName: 'com.velox.velox',
+  maxNativeZoom: 19,
+),
               if (track.length >= 2)
                 PolylineLayer(
                   polylines: [
