@@ -84,8 +84,7 @@ class _MapScreenState extends State<MapScreen> {
             children: [
               TileLayer(
   urlTemplate: AppConstants.mapUrlTemplate,
-  tileProvider: FMTCStore(AppConstants.mapStoreKey)
-      .getTileProvider(),
+  tileProvider: NetworkTileProvider(),
   userAgentPackageName: 'com.velox.velox',
   maxNativeZoom: 19,
 ),
