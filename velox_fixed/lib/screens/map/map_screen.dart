@@ -9,6 +9,7 @@ import '../../utils/app_theme.dart';
 import '../../utils/constants.dart';
 import '../../widgets/speedometer_panel.dart';
 import '../../widgets/ride_controls.dart';
+import 'package:flutter_map/flutter_map.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
