@@ -1,9 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../providers/auth_provider.dart';
 import '../../providers/chat_provider.dart';
@@ -13,8 +9,10 @@ import '../../utils/app_theme.dart';
 
 
 class ChatScreen extends StatefulWidget {
+
   final String chatId;
   final UserModel otherUser;
+
 
   const ChatScreen({
     super.key,
@@ -22,26 +20,36 @@ class ChatScreen extends StatefulWidget {
     required this.otherUser,
   });
 
+
   @override
   State<ChatScreen> createState() => _ChatScreenState();
+
 }
+
 
 
 class _ChatScreenState extends State<ChatScreen> {
 
-  final _textCtrl = TextEditingController();
-  final _scrollCtrl = ScrollController();
-  final ImagePicker _picker = ImagePicker();
 
-  bool _sending = false;
+  final TextEditingController _textCtrl =
+      TextEditingController();
+
+  final ScrollController _scrollCtrl =
+      ScrollController();
+
 
 
   @override
   void dispose() {
+
     _textCtrl.dispose();
+
     _scrollCtrl.dispose();
+
     super.dispose();
+
   }
+
 
 
   void _scrollToBottom() {
@@ -51,9 +59,15 @@ class _ChatScreenState extends State<ChatScreen> {
       if (_scrollCtrl.hasClients) {
 
         _scrollCtrl.animateTo(
+
           _scrollCtrl.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeOut,
+
+          duration:
+          const Duration(milliseconds:250),
+
+          curve:
+          Curves.easeOut,
+
         );
 
       }
@@ -64,74 +78,44 @@ class _ChatScreenState extends State<ChatScreen> {
 
 
 
+
   Future<void> _sendText() async {
 
-    final text = _textCtrl.text.trim();
+
+    final text =
+        _textCtrl.text.trim();
+
+
 
     if(text.isEmpty) return;
 
 
-    final user = context.read<AuthProvider>().user!;
+
+    final user =
+        context.read<AuthProvider>().user!;
+
 
 
     await context.read<ChatProvider>().sendMessage(
+
       chatId: widget.chatId,
+
       senderId: user.uid,
+
       senderUsername: user.username,
+
       content: text,
+
     );
+
 
 
     _textCtrl.clear();
 
-    _scrollToBottom();
-
-  }
-
-
-
-
-  Future<void> _sendImage() async {
-
-
-    final xFile = await _picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 70,
-    );
-
-
-    if(xFile == null || !mounted) return;
-
-
-    setState(() {
-      _sending = true;
-    });
-
-
-
-    final user = context.read<AuthProvider>().user!;
-
-
-
-    await context.read<ChatProvider>().sendImage(
-      chatId: widget.chatId,
-      senderId: user.uid,
-      senderUsername: user.username,
-      imageFile: File(xFile.path),
-    );
-
-
-
-    if(mounted){
-
-      setState(() {
-        _sending = false;
-      });
-
-    }
 
 
     _scrollToBottom();
+
 
   }
 
@@ -150,10 +134,14 @@ class _ChatScreenState extends State<ChatScreen> {
 
     return Scaffold(
 
-      backgroundColor: AppTheme.background,
+
+      backgroundColor:
+      AppTheme.background,
+
 
 
       appBar: AppBar(
+
 
         title: Row(
 
@@ -161,42 +149,38 @@ class _ChatScreenState extends State<ChatScreen> {
 
 
             _SmallAvatar(
-              url: widget.otherUser.avatarUrl,
-              name: widget.otherUser.username,
+
+              name:
+              widget.otherUser.username,
+
             ),
+
 
 
             const SizedBox(width:10),
 
 
-            Column(
 
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Text(
 
-              children: [
+              widget.otherUser.username,
 
-                Text(
-                  widget.otherUser.username,
-                  style: const TextStyle(fontSize:15),
-                ),
+              style:
+              const TextStyle(
+                fontSize:16,
+              ),
 
-
-                const Text(
-                  "online",
-                  style: TextStyle(
-                    color: AppTheme.textMuted,
-                    fontSize:11,
-                  ),
-                ),
-
-              ],
             )
+
 
           ],
 
         ),
 
+
       ),
+
+
 
 
 
@@ -207,37 +191,60 @@ class _ChatScreenState extends State<ChatScreen> {
 
           Expanded(
 
-            child: StreamBuilder<List<MessageModel>>(
 
-              stream: context
+            child:
+            StreamBuilder<List<MessageModel>>(
+
+
+              stream:
+              context
                   .read<ChatProvider>()
                   .getChatMessages(widget.chatId),
 
 
-              builder:(context,snap){
+
+              builder:(context,snapshot){
 
 
-                final messages = snap.data ?? [];
+                final messages =
+                    snapshot.data ?? [];
 
 
 
                 if(messages.isNotEmpty){
+
                   _scrollToBottom();
+
                 }
+
 
 
 
                 return ListView.builder(
 
-                  controller:_scrollCtrl,
 
-                  itemCount:messages.length,
+                  controller:
+                  _scrollCtrl,
+
+
+
+                  padding:
+                  const EdgeInsets.all(12),
+
+
+
+                  itemCount:
+                  messages.length,
+
 
 
                   itemBuilder:(context,index){
 
 
-                    final msg = messages[index];
+
+                    final msg =
+                        messages[index];
+
 
 
                     final isMe =
@@ -245,57 +252,59 @@ class _ChatScreenState extends State<ChatScreen> {
 
 
 
+
                     return _MessageBubble(
+
                       msg:msg,
+
                       isMe:isMe,
+
                     );
 
 
                   },
+
 
                 );
 
 
               },
 
+
             ),
+
 
           ),
 
 
 
 
-          if(_sending)
-
-            const LinearProgressIndicator(
-              color:AppTheme.accent,
-            ),
-
-
-
-
           _InputBar(
 
-            controller:_textCtrl,
+            controller:
+            _textCtrl,
 
-            onSend:_sendText,
+            onSend:
+            _sendText,
 
-            onImage:_sendImage,
-
-            enabled:!_sending,
 
           )
 
 
         ],
 
+
       ),
+
 
     );
 
+
   }
 
+
 }
+
 
 
 
@@ -309,89 +318,115 @@ class _MessageBubble extends StatelessWidget {
   final bool isMe;
 
 
+
   const _MessageBubble({
+
     required this.msg,
+
     required this.isMe,
+
   });
 
 
 
+
+
   @override
-  Widget build(BuildContext context){
-
-
-    final isImage =
-        msg.content.startsWith("http");
+  Widget build(BuildContext context) {
 
 
 
     return Align(
 
+
       alignment:
-      isMe ? Alignment.centerRight :
-      Alignment.centerLeft,
+      isMe
+          ? Alignment.centerRight
+          : Alignment.centerLeft,
+
 
 
       child: Container(
 
 
+
         margin:
-        const EdgeInsets.all(6),
+        const EdgeInsets.only(
+          bottom:6,
+        ),
+
 
 
         padding:
-        const EdgeInsets.all(10),
+        const EdgeInsets.symmetric(
+
+          horizontal:14,
+
+          vertical:10,
+
+        ),
 
 
-        decoration:BoxDecoration(
+
+
+        decoration:
+        BoxDecoration(
+
 
           color:
-          isMe ?
-          AppTheme.accent :
-          AppTheme.card,
+          isMe
+              ? AppTheme.accent
+              : AppTheme.card,
+
 
 
           borderRadius:
           BorderRadius.circular(16),
 
+
         ),
 
 
 
-        child:isImage
 
-            ?
+        child: Text(
 
-        CachedNetworkImage(
-          imageUrl:msg.content,
-          width:220,
-        )
-
-
-            :
-
-        Text(
 
           msg.content,
 
-          style:TextStyle(
+
+
+          style:
+          TextStyle(
+
 
             color:
-            isMe ?
-            Colors.black :
-            AppTheme.textPrimary,
+            isMe
+                ? Colors.black
+                : AppTheme.textPrimary,
+
+
+            fontSize:15,
+
 
           ),
 
+
         ),
+
+
 
       ),
 
+
     );
+
 
   }
 
+
 }
+
 
 
 
@@ -405,10 +440,6 @@ class _InputBar extends StatelessWidget {
 
   final VoidCallback onSend;
 
-  final VoidCallback onImage;
-
-  final bool enabled;
-
 
 
   const _InputBar({
@@ -417,61 +448,103 @@ class _InputBar extends StatelessWidget {
 
     required this.onSend,
 
-    required this.onImage,
-
-    required this.enabled,
-
   });
 
 
 
+
+
   @override
-  Widget build(BuildContext context){
-
-
-    return Row(
-
-      children:[
-
-
-        IconButton(
-
-          icon:
-          const Icon(Icons.image),
-
-          onPressed:
-          enabled ? onImage : null,
-
-        ),
+  Widget build(BuildContext context) {
 
 
 
-        Expanded(
+    return Container(
 
-          child:TextField(
 
-            controller:controller,
+      padding:
+      const EdgeInsets.all(10),
 
-            enabled:enabled,
+
+
+      color:
+      AppTheme.surface,
+
+
+
+      child:
+      Row(
+
+
+
+        children: [
+
+
+
+          Expanded(
+
+
+
+            child:
+            TextField(
+
+
+
+              controller:
+              controller,
+
+
+
+              decoration:
+              const InputDecoration(
+
+                hintText:
+                "Message...",
+
+              ),
+
+
+
+              onSubmitted:
+              (_) => onSend(),
+
+
+
+            ),
+
+
 
           ),
 
-        ),
 
 
 
-        IconButton(
 
-          icon:
-          const Icon(Icons.send),
-
-          onPressed:
-          enabled ? onSend : null,
-
-        )
+          IconButton(
 
 
-      ],
+            icon:
+            const Icon(
+              Icons.send,
+            ),
+
+
+
+            onPressed:
+            onSend,
+
+
+          )
+
+
+
+        ],
+
+
+
+      ),
+
+
 
     );
 
@@ -486,10 +559,9 @@ class _InputBar extends StatelessWidget {
 
 
 
+
 class _SmallAvatar extends StatelessWidget {
 
-
-  final String? url;
 
   final String name;
 
@@ -497,27 +569,64 @@ class _SmallAvatar extends StatelessWidget {
 
   const _SmallAvatar({
 
-    this.url,
-
     required this.name,
 
   });
 
 
 
+
+
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
 
 
     return CircleAvatar(
 
-      child:Text(
+
+      radius:17,
+
+
+      backgroundColor:
+      AppTheme.card,
+
+
+
+      child:
+      Text(
+
+
         name.isNotEmpty
             ? name[0].toUpperCase()
-            : "?",
+            : '?',
+
+
+
+        style:
+        const TextStyle(
+
+
+          color:
+          AppTheme.accent,
+
+
+          fontSize:13,
+
+
+          fontWeight:
+          FontWeight.w700,
+
+
+        ),
+
+
+
       ),
 
+
+
     );
+
 
   }
 
