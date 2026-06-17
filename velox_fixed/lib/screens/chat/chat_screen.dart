@@ -96,7 +96,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
 
 
-    await context.read<ChatProvider>().sendMessage(
+    await context.read<ChatProvider>().sendText(
 
       chatId: widget.chatId,
 
