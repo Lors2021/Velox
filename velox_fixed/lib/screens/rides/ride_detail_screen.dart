@@ -6,6 +6,7 @@ import '../../models/ride_model.dart';
 import '../../utils/app_theme.dart';
 import '../../utils/constants.dart';
 import '../../utils/formatters.dart';
+import 'package:flutter_map/flutter_map.dart';
 
 class RideDetailScreen extends StatelessWidget {
   final RideModel ride;
@@ -54,8 +55,7 @@ class RideDetailScreen extends StatelessWidget {
                 children: [
                   TileLayer(
                     urlTemplate: AppConstants.mapUrlTemplate,
-                    tileProvider: FMTCStore(AppConstants.mapStoreKey)
-                        .getTileProvider(),
+                    tileProvider: NetworkTileProvider()
                     userAgentPackageName: 'com.velox.velox',
                   ),
                   if (ride.trackPoints.length >= 2)
