@@ -108,15 +108,14 @@ class _ChatScreenState extends State<ChatScreen> {
                     style: const TextStyle(fontSize: 15),
                     overflow: TextOverflow.ellipsis,
                   ),
-                  if (widget.otherUser.isOnline)
-                    const Text(
-                      'online',
-                      style: TextStyle(
-                          color: AppTheme.accent,
-                          fontSize: 11,
-                          fontWeight: FontWeight.normal),
-                    ),
-                ],
+               const Text(
+                 'cyclist',
+                 style: TextStyle(
+                   color: AppTheme.textMuted,
+                   fontSize: 11,
+                   fontWeight: FontWeight.normal,
+                 ),
+               ),
               ),
             ),
           ],
@@ -382,12 +381,7 @@ class _InputBar extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          IconButton(
-            icon: const Icon(Icons.image_outlined,
-                color: AppTheme.textSecondary),
-            onPressed: enabled ? onImage : null,
-          ),
-          Expanded(
+         Expanded(
             child: TextField(
               controller: controller,
               enabled: enabled,
