@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/chat_provider.dart';
 import '../../models/message_model.dart';
@@ -25,7 +24,6 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final _textCtrl = TextEditingController();
   final _scrollCtrl = ScrollController();
-  final _picker = ImagePicker();
   bool _sending = false;
 
   @override
@@ -47,18 +45,6 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  Future<void> _sendText() async {
-    final text = _textCtrl.text.trim();
-    if (text.isEmpty || _sending) return;
-    _textCtrl.clear();
-    setState(() => _sending = true);
-    final user = context.read<AuthProvider>().user!;
-    await context.read<ChatProvider>().sendText(
-          chatId: widget.chatId,
-          senderId: user.uid,
-          senderUsername: user.username,
-          text: text,
-        );
     if (mounted) setState(() => _sending = false);
     _scrollToBottom();
   }
@@ -243,9 +229,7 @@ class _MessageBubble extends StatelessWidget {
           ),
           border: isMe ? null : Border.all(color: AppTheme.border),
         ),
-        child: msg.type == MessageType.image
-            ? _ImageBubble(url: msg.content, isMe: isMe)
-            : Padding(
+        child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: Column(
@@ -277,11 +261,6 @@ class _MessageBubble extends StatelessWidget {
     );
   }
 }
-
-class _ImageBubble extends StatelessWidget {
-  final String url;
-  final bool isMe;
-  const _ImageBubble({required this.url, required this.isMe});
 
   @override
   Widget build(BuildContext context) {
@@ -324,10 +303,6 @@ class _ImageBubble extends StatelessWidget {
     );
   }
 }
-
-class _FullScreenImage extends StatelessWidget {
-  final String url;
-  const _FullScreenImage({required this.url});
 
   @override
   Widget build(BuildContext context) {
@@ -436,24 +411,24 @@ class _InputBar extends StatelessWidget {
 class _SmallAvatar extends StatelessWidget {
   final String? url;
   final String name;
-  const _SmallAvatar({this.url, required this.name});
+
+  const _SmallAvatar({
+    this.url,
+    required this.name,
+  });
 
   @override
   Widget build(BuildContext context) {
-    if (url != null && url!.isNotEmpty) {
-      return CircleAvatar(
-          radius: 17,
-          backgroundImage: CachedNetworkImageProvider(url!));
-    }
     return CircleAvatar(
       radius: 17,
       backgroundColor: AppTheme.card,
       child: Text(
         name.isNotEmpty ? name[0].toUpperCase() : '?',
         style: const TextStyle(
-            color: AppTheme.accent,
-            fontSize: 13,
-            fontWeight: FontWeight.w700),
+          color: AppTheme.accent,
+          fontSize: 13,
+          fontWeight: FontWeight.w700,
+        ),
       ),
     );
   }
