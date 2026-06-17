@@ -104,7 +104,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
       senderUsername: user.username,
 
-      content: text,
+      text: text,
 
     );
 
