@@ -12,7 +12,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./velox_fixed
+        working-directory: ./velox_patched
 
     steps:
       - name: Checkout repository
@@ -46,4 +46,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: velox-release-apk
-          path: velox_fixed/build/app/outputs/flutter-apk/app-release.apk
+          path: velox_patched/build/app/outputs/flutter-apk/app-release.apk
