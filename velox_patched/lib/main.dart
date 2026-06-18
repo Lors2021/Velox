@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 
 import 'providers/auth_provider.dart';
 import 'providers/ride_provider.dart';
@@ -22,10 +21,6 @@ void main() async {
 
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-  // FMTC v9 initialisation
-  await FlutterMapTileCaching.initialise();
-  await FMTC.instance('mapStore').manage.createAsync();
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
