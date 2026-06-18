@@ -20,7 +20,6 @@ dependencies:
   # Map
   flutter_map: ^7.0.2
   latlong2: ^0.9.1
-  flutter_map_tile_caching: ^10.0.0
 
   # Location
   geolocator: ^13.0.1
