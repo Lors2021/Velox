@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import '../../providers/ride_provider.dart';
@@ -84,12 +83,7 @@ class _MapScreenState extends State<MapScreen> {
             children: [
               TileLayer(
                 urlTemplate: AppConstants.mapUrlTemplate,
-                tileProvider: FMTC.instance(AppConstants.mapStoreKey)
-                    .getTileProvider(
-                  settings: FMTCTileProviderSettings(
-                    behavior: CacheBehavior.cacheFirst,
-                  ),
-                ),
+                tileProvider: NetworkTileProvider(),
                 userAgentPackageName: 'com.velox.velox',
                 maxNativeZoom: 19,
               ),
